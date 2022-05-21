@@ -1,11 +1,11 @@
 all:
-	make client
-	make server 
+	make scanner
+	make work
 
-client:
+scanner:
 	go build -v -o client main.go
 
-server:
+work:
 	go build -v -o worker/worker worker/worker.go
 
 clean:
