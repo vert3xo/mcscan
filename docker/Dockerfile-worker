@@ -1,0 +1,14 @@
+FROM golang:alpine
+
+WORKDIR /usr/src/app
+
+COPY go.mod go.sum ./
+RUN go mod download && go mod verify
+
+COPY worker/worker.go main.go
+COPY tasks ./tasks
+COPY .env .env
+
+RUN go build -o worker -ldflags='-X main.redisAddr=redis:6379 -X main.mongoAddr=mongo:27017' main.go
+
+CMD ["./worker"]

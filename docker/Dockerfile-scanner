@@ -1,0 +1,15 @@
+FROM golang:alpine
+
+WORKDIR /usr/src/app
+
+COPY go.mod go.sum ./
+RUN apk add masscan libpcap-dev libc-dev gcc
+RUN go mod download && go mod verify
+
+COPY main.go .
+COPY tasks ./tasks
+COPY .env .env
+
+RUN go build -o scanner -ldflags='-X main.redisAddr=redis:6379' main.go
+
+CMD ["./scanner"]

@@ -1,0 +1,42 @@
+version: "3.9"
+
+services:
+  redis:
+    image: "redis:alpine"
+
+  mongo:
+    image: "mongo"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=vert3xo
+      - MONGO_INITDB_ROOT_PASSWORD=secretPassword
+      - MONGO_INITDB_DATABASE=mcscan
+
+  mongo-express:
+    image: "mongo-express"
+    restart: unless-stopped
+    depends_on:
+      - mongo
+    ports:
+      - "8081:8081"
+    environment:
+      - ME_CONFIG_BASICAUTH_USERNAME=admin
+      - ME_CONFIG_BASICAUTH_PASSWORD=admin
+      - ME_CONFIG_MONGODB_ADMINUSERNAME=vert3xo
+      - ME_CONFIG_MONGODB_ADMINPASSWORD=secretPassword
+      - ME_CONFIG_MONGODB_AUTH_DATABASE=admin
+      - ME_CONFIG_MONGODB_SERVER=mongo
+
+  scanner:
+    depends_on:
+      - redis
+      - mongo
+      - worker
+    build:
+      dockerfile: docker/Dockerfile-scanner
+
+  worker:
+    depends_on:
+      - redis
+      - mongo
+    build:
+      dockerfile: docker/Dockerfile-worker
