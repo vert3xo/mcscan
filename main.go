@@ -4,6 +4,7 @@ import (
 	"log"
 	"os"
 	"strconv"
+	_ "unsafe"
 
 	"github.com/hibiken/asynq"
 	"github.com/joho/godotenv"
@@ -23,12 +24,19 @@ func main() {
 	defer client.Close()
 
 	rate, _ := strconv.Atoi(os.Getenv("SCAN_RATE"))
+
+	// just some hacky code because there's no option to add excluded addresses
+	//go:linkname args github.com/zan8in/masscan.Scanner.args
+	var args []string
+	args = append(args, "127.0.0.1,255.255.255.255")
+
 	scanner, err := masscan.NewScanner(
 		masscan.SetParamRate(rate),
 		masscan.SetParamTargets(os.Getenv("SCAN_RANGE")),
 		masscan.SetParamPorts("25565"),
 		masscan.EnableDebug(),
 	)
+
 	if err != nil {
 		log.Fatalf("failed to create a scanner: %v", err)
 	}
@@ -39,7 +47,7 @@ func main() {
 
 	stdout := scanner.GetStdout()
 
-	go func(){
+	go func() {
 		for stdout.Scan() {
 			res := masscan.ParseResult(stdout.Bytes())
 
@@ -58,7 +66,7 @@ func main() {
 			log.Printf("enqueued task: id=%s queue=%s", info.ID, info.Queue)
 		}
 	}()
-	  
+
 	if err = scanner.Wait(); err != nil {
 		log.Fatalf("failed to wait for the scan to finish: %v", err)
 	}
