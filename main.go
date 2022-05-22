@@ -4,7 +4,6 @@ import (
 	"log"
 	"os"
 	"strconv"
-	_ "unsafe"
 
 	"github.com/hibiken/asynq"
 	"github.com/joho/godotenv"
@@ -24,11 +23,6 @@ func main() {
 	defer client.Close()
 
 	rate, _ := strconv.Atoi(os.Getenv("SCAN_RATE"))
-
-	// just some hacky code because there's no option to add excluded addresses
-	//go:linkname args github.com/zan8in/masscan.Scanner.args
-	var args []string
-	args = append(args, "127.0.0.1,255.255.255.255")
 
 	scanner, err := masscan.NewScanner(
 		masscan.SetParamRate(rate),
