@@ -3,7 +3,7 @@ module github.com/vert3xo/mcscan
 go 1.17
 
 require (
-	github.com/alteamc/minequery v1.1.5
+	github.com/alteamc/minequery v1.1.6
 	github.com/hibiken/asynq v0.23.0
 	github.com/joho/godotenv v1.4.0
 	github.com/zan8in/masscan v0.0.0-20220427061403-88ba387d5740
