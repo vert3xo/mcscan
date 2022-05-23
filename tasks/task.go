@@ -14,10 +14,10 @@ import (
 )
 
 type Database struct {
-	Client		*mongo.Client
-	Ctx			context.Context
-	CtxCancel	context.CancelFunc
-	Error		error
+	Client    *mongo.Client
+	Ctx       context.Context
+	CtxCancel context.CancelFunc
+	Error     error
 }
 
 var database Database
@@ -27,24 +27,24 @@ const (
 )
 
 type ServerPayload struct {
-	Ip		string
-	Port	int
+	Ip   string
+	Port int
 }
 
 type PlayersList struct {
-	UUID		string	`json:"uuid"`
-	Username	string	`json:"username"`
+	UUID     string `json:"uuid"`
+	Username string `json:"username"`
 }
 
 type PingResponse struct {
-	Host			string			`json:"host"`
-	Port			int				`json:"port"`
-	Version			string			`json:"version"`
-	MaxPlayers		int				`json:"maxPlayers"`
-	OnlinePlayers	int				`json:"onlinePlayers"`
-	PlayersList		[]PlayersList	`json:"playersList"`
-	Description		interface{}		`json:"description"`
-	Favicon			string			`json:"favicon"`
+	Host          string        `json:"host"`
+	Port          int           `json:"port"`
+	Version       string        `json:"version"`
+	MaxPlayers    int           `json:"maxPlayers"`
+	OnlinePlayers int           `json:"onlinePlayers"`
+	PlayersList   []PlayersList `json:"playersList"`
+	Description   interface{}   `json:"description"`
+	Favicon       string        `json:"favicon"`
 }
 
 func ConnectMongo(mongoUsername, mongoPassword, mongoSocket, authDB string) Database {
@@ -54,7 +54,7 @@ func ConnectMongo(mongoUsername, mongoPassword, mongoSocket, authDB string) Data
 		return database
 	}
 
-	ctx, ctxCancel := context.WithTimeout(context.Background(), time.Second * 10)
+	ctx, ctxCancel := context.WithTimeout(context.Background(), time.Second*20)
 	err = client.Connect(ctx)
 	if err != nil {
 		database = Database{Client: nil, Ctx: ctx, CtxCancel: ctxCancel, Error: err}
@@ -69,20 +69,20 @@ func intoPingResponse(host string, port int, response ping.Response) *PingRespon
 	playersList := []PlayersList{}
 	for i := 0; i < len(response.Players.Sample); i++ {
 		playersList = append(playersList, PlayersList{
-			UUID: response.Players.Sample[i].ID,
+			UUID:     response.Players.Sample[i].ID,
 			Username: response.Players.Sample[i].Name,
 		})
 	}
 
 	return &PingResponse{
-		Host: host,
-		Port: port,
-		Version: response.Version.Name,
-		MaxPlayers: response.Players.Max,
+		Host:          host,
+		Port:          port,
+		Version:       response.Version.Name,
+		MaxPlayers:    response.Players.Max,
 		OnlinePlayers: response.Players.Online,
-		PlayersList: playersList,
-		Description: response.Description,
-		Favicon: response.Favicon,
+		PlayersList:   playersList,
+		Description:   response.Description,
+		Favicon:       response.Favicon,
 	}
 }
 
@@ -102,7 +102,7 @@ func HandleGetPingResponseTask(ctx context.Context, t *asynq.Task) error {
 	}
 
 	log.Printf("Pinging %s:%d", p.Ip, p.Port)
-	res, err := ping.PingWithTimeout(p.Ip, uint16(p.Port), time.Second * 10)
+	res, err := ping.PingWithTimeout(p.Ip, uint16(p.Port), time.Second*10)
 	if err == nil {
 		properResponse := intoPingResponse(p.Ip, p.Port, *res)
 		_, err = database.Client.Database("mcscan").Collection("servers").InsertOne(database.Ctx, properResponse)
