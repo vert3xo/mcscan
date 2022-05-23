@@ -23,12 +23,15 @@ func main() {
 	defer client.Close()
 
 	rate, _ := strconv.Atoi(os.Getenv("SCAN_RATE"))
+
 	scanner, err := masscan.NewScanner(
 		masscan.SetParamRate(rate),
 		masscan.SetParamTargets(os.Getenv("SCAN_RANGE")),
 		masscan.SetParamPorts("25565"),
+		masscan.SetParamWait(5),
 		masscan.EnableDebug(),
 	)
+
 	if err != nil {
 		log.Fatalf("failed to create a scanner: %v", err)
 	}
@@ -39,7 +42,7 @@ func main() {
 
 	stdout := scanner.GetStdout()
 
-	go func(){
+	go func() {
 		for stdout.Scan() {
 			res := masscan.ParseResult(stdout.Bytes())
 
@@ -58,7 +61,7 @@ func main() {
 			log.Printf("enqueued task: id=%s queue=%s", info.ID, info.Queue)
 		}
 	}()
-	  
+
 	if err = scanner.Wait(); err != nil {
 		log.Fatalf("failed to wait for the scan to finish: %v", err)
 	}

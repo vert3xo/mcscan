@@ -26,7 +26,6 @@ func main() {
 		log.Fatalf("failed to connect to the database: %v", database.Error)
 	}
 	defer database.Client.Disconnect(database.Ctx)
-	defer database.CtxCancel()
 
 	server := asynq.NewServer(asynq.RedisClientOpt{Addr: redisAddr}, asynq.Config{
 		Concurrency: 10,
