@@ -28,6 +28,7 @@ func main() {
 		masscan.SetParamRate(rate),
 		masscan.SetParamTargets(os.Getenv("SCAN_RANGE")),
 		masscan.SetParamPorts("25565"),
+		masscan.SetParamWait(5),
 		masscan.EnableDebug(),
 	)
 
