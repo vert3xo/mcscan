@@ -14,10 +14,9 @@ import (
 )
 
 type Database struct {
-	Client    *mongo.Client
-	Ctx       context.Context
-	CtxCancel context.CancelFunc
-	Error     error
+	Client *mongo.Client
+	Ctx    context.Context
+	Error  error
 }
 
 var database Database
@@ -50,18 +49,18 @@ type PingResponse struct {
 func ConnectMongo(mongoUsername, mongoPassword, mongoSocket, authDB string) Database {
 	client, err := mongo.NewClient(options.Client().ApplyURI(fmt.Sprintf("mongodb://%s:%s@%s/%s", mongoUsername, mongoPassword, mongoSocket, authDB)))
 	if err != nil {
-		database = Database{Client: nil, Ctx: nil, CtxCancel: nil, Error: err}
+		database = Database{Client: nil, Ctx: nil, Error: err}
 		return database
 	}
 
-	ctx, ctxCancel := context.WithTimeout(context.Background(), time.Second*20)
+	ctx := context.Background()
 	err = client.Connect(ctx)
 	if err != nil {
-		database = Database{Client: nil, Ctx: ctx, CtxCancel: ctxCancel, Error: err}
+		database = Database{Client: nil, Ctx: ctx, Error: err}
 		return database
 	}
 
-	database = Database{Client: client, Ctx: ctx, CtxCancel: ctxCancel, Error: nil}
+	database = Database{Client: client, Ctx: ctx, Error: nil}
 	return database
 }
 
