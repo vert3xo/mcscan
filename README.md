@@ -1,7 +1,5 @@
-# Minecraft Scanner
-Program that scans the entire internet for servers with default Minecraft port open (25565).
-
-It saves the results in MongoDB database. Mongo Express frontend is also available.
+<h1 align="center">Minecraft Scanner</h1>
+<h3 align="center">A tool that scans the Internet for open Minecraft servers</h3>
 
 # Known Issues
 The masscan wrapper library this project uses currently doesn't support exclusion of IP addresses and thus doesn't support scanning of range `0.0.0.0/0`
