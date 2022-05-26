@@ -11,13 +11,13 @@ import (
 	"github.com/zan8in/masscan"
 )
 
-var redisAddr = "127.0.0.1:6379"
-
 func main() {
 	err := godotenv.Load()
 	if err != nil {
 		log.Fatalf("failed to load .env file: %v", err)
 	}
+
+	redisAddr := os.Getenv("REDIS_SOCKET")
 
 	client := asynq.NewClient(asynq.RedisClientOpt{Addr: redisAddr})
 	defer client.Close()

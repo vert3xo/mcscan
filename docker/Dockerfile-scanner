@@ -10,6 +10,8 @@ COPY main.go .
 COPY tasks ./tasks
 COPY .env .env
 
-RUN go build -o scanner -ldflags='-X main.redisAddr=redis:6379' main.go
+ENV REDIS_SOCKET=redis:6379
+
+RUN go build -o scanner main.go
 
 CMD ["./scanner"]

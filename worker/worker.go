@@ -9,14 +9,14 @@ import (
 	"github.com/vert3xo/mcscan/tasks"
 )
 
-var redisAddr = "127.0.0.1:6379"
-var mongoAddr = "127.0.0.1:27017"
-
 func main() {
 	err := godotenv.Load()
 	if err != nil {
 		log.Fatalf("Failed to load .env: %v", err)
 	}
+
+	redisAddr := os.Getenv("REDIS_SOCKET")
+	mongoAddr := os.Getenv("MONGO_SOCKET")
 
 	mongoUsername := os.Getenv("MONGO_USERNAME")
 	mongoPassword := os.Getenv("MONGO_PASSWORD")
