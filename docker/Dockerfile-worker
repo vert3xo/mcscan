@@ -9,9 +9,6 @@ COPY worker/worker.go main.go
 COPY tasks ./tasks
 COPY .env .env
 
-ENV REDIS_SOCKET=redis:6379
-ENV MONGO_SOCKET=mongo:27017
-
 RUN go build -o worker main.go
 
 CMD ["./worker"]

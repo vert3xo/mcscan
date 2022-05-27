@@ -33,6 +33,8 @@ services:
       - worker
     build:
       dockerfile: docker/Dockerfile-scanner
+    environment:
+      - REDIS_SOCKET=redis:6379
 
   worker:
     depends_on:
@@ -40,3 +42,6 @@ services:
       - mongo
     build:
       dockerfile: docker/Dockerfile-worker
+    environment:
+      - REDIS_SOCKET=redis:6379
+      - MONGO_SOCKET=mongo:27017
