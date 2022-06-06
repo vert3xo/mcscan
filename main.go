@@ -27,6 +27,7 @@ func main() {
 	scanner, err := masscan.NewScanner(
 		masscan.SetParamRate(rate),
 		masscan.SetParamTargets(os.Getenv("SCAN_RANGE")),
+		masscan.SetParamExclude("255.255.255.255"),
 		masscan.SetParamPorts("25565"),
 		masscan.SetParamWait(5),
 		masscan.EnableDebug(),
