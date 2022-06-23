@@ -31,8 +31,8 @@ If you need to modify any addresses you can use the following commands for compi
 
 #### Worker
 
-`go build -o worker -ldflags='-X main.redisAddr=<redis_address>:<redis_port> -X main.mongoAddr=<mongo_address>:<mongo_port>' worker/worker.go`
+`go build -o worker worker/worker.go`
 
 #### Scanner
 
-`go build -o scanner -ldflags='-X main.redisAddr=<redis_address>:<redis_port>' main.go`
+`go build -o scanner main.go`
