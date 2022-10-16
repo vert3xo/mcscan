@@ -5,6 +5,8 @@
 
 ## Environment variables
 
+**Important: don't forget to edit `docker-compose.yml` and change the volume option. By default it's set to `/dev/shm/` so it shouldn't cause any chaos even if someone forgets to change it**
+
 Except the addresses all other values can be configured in `.env`.
 
 To get started just rename `.env.example` to `.env` and change the values.
