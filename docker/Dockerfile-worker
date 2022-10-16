@@ -7,6 +7,8 @@ RUN go mod download && go mod verify
 
 COPY worker/worker.go main.go
 COPY tasks ./tasks
+COPY utils ./utils
+COPY types ./types
 COPY .env .env
 
 RUN go build -o worker main.go
