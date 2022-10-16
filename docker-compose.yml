@@ -10,6 +10,8 @@ services:
       - MONGO_INITDB_ROOT_USERNAME=vert3xo
       - MONGO_INITDB_ROOT_PASSWORD=secretPassword
       - MONGO_INITDB_DATABASE=mcscan
+    volumes:
+      - /dev/shm:/data/db
 
   mongo-express:
     image: "mongo-express"
